@@ -1,7 +1,7 @@
 { "name":"MusicCast",
   "manufacturer":"Yamaha",
   "type":"AVRECEIVER",
-  "version":10,
+  "version":11,
   "compatible-meta":"1.0.2b",
   "persistedvariables":{
     "ToInitiate":true,
@@ -46,7 +46,7 @@
     "welcomeheadertext":"Yamaha AVR and MusicCast Driver",
     "welcomedescription":"powered by meta v2 \n by JAC459 \n X \n Driver Development \n by MarkusM",
     "initcommandset":[
-      {"type":"mDNS", "command":"", "queryresult":["$.[?(@property === \"short\" && @.match(/_spotify-connect._tcp.local$/i))]^"], "evalwrite":[{"variable":"PreSelection","value":"DYNAMIK let l = JSON.parse(\"$Result\"); JSON.stringify(l.filter(item=>{return item.ip!=undefined}))"}, {"variable":"NumDevicesFound","value":"DYNAMIK $PreSelection.length"}, {"variable":"ToInitiate","value":false}], "evaldo":[{"test":true, "then":"__CHECK", "or":""}, {"test":true, "then":"__PERSIST", "or":""}]}
+      {"type":"mDNS", "command":"", "queryresult":["$.[?(@property === \"short\" && @.match(/_http._tcp.local$/i))]^"], "evalwrite":[{"variable":"PreSelection","value":"DYNAMIK let l = JSON.parse(\"$Result\"); JSON.stringify(l.filter(item=>{return item.ip!=undefined}))"}, {"variable":"NumDevicesFound","value":"DYNAMIK $PreSelection.length"}, {"variable":"ToInitiate","value":false}], "evaldo":[{"test":true, "then":"__CHECK", "or":""}, {"test":true, "then":"__PERSIST", "or":""}]}
     ],
     "command": {"type":"static", "command":"DYNAMIK if ($NumDevicesFound == $Iterator) {JSON.parse(\"$MusicCastList\")} else if ($NumDevicesFound == \"0\") {[{\"room_name\":\"No devices found in pre filtering.\", \"model_name\":\"\", \"ip\":\"Not Found\"}]} else {let res = [{\"room_name\":\"\", \"model_name\":\"\", \"ip\":\"Not Found\"}]; res[0].room_name = \"Scanning \" + Math.round(Number($Iterator)/(Number($NumDevicesFound)-1)*100) + \"% - Please Refresh List\"; res;}",
       "queryresult":"$.*"}
@@ -129,7 +129,8 @@
       "SetStatTime":false,
       "SetStatProgress":false,
       "SetStatAudioFormat":false,
-      "SetStatVolume":false
+      "SetStatVolume":false,
+      "SetVolumeLimit":"none"
     },
     "labels":{
       "CurrentStatus": {"label":"Status", "listen":"Status", "actionlisten":"ActStatus"}
@@ -142,7 +143,7 @@
         "evalwrite":[
           {"variable": "SpeakerPatternNum", "value": "DYNAMIK JSON.parse(\"$Result\")[0].speaker_pattern == undefined ? 1 : JSON.parse(\"$Result\")[0].speaker_pattern"}
       ]},
-      "YamahaStatus": {"type":"http-get", "isHub":false, "command":"http://$MusicCastIp/YamahaExtendedControl/v1/$ZoneId/getStatus", "pooltime":"2000", "poolduration":"", "queryresult" : "$.", 
+      "YamahaStatus": {"type":"http-get", "isHub":false, "command":"http://$MusicCastIp/YamahaExtendedControl/v1/$ZoneId/getStatus", "pooltime":"1000", "poolduration":"", "queryresult" : "$.", 
         "evalwrite":[
           {"variable": "VolumePlayedTotal",  "value": "DYNAMIK Math.round(Number(JSON.parse(\"$Result\")[0].volume))"},
           {"variable": "VolumePlayedPercent","value": "DYNAMIK Math.round(Number(JSON.parse(\"$Result\")[0].volume)*100/($VolumeMax-$VolumeMin))"},
@@ -199,7 +200,7 @@
       "__MUTEON":       {"label":"", "type":"http-get", "command":"http://$MusicCastIp/YamahaExtendedControl/v1/$ZoneId/setMute?enable=true",  "queryresult":"$.response_code", "evalwrite":[{"variable":"ActStatus", "value":"DYNAMIK ($Result==0) ? \"Mute On\"  : \"Command failed\" "}]},
       "__MUTEOFF":      {"label":"", "type":"http-get", "command":"http://$MusicCastIp/YamahaExtendedControl/v1/$ZoneId/setMute?enable=false", "queryresult":"$.response_code", "evalwrite":[{"variable":"ActStatus", "value":"DYNAMIK ($Result==0) ? \"Mute Off\" : \"Command failed\" "}]},
 
-      "__VOLUMESET":    {"label":"", "type":"http-get", "command":"DYNAMIK \"http://$MusicCastIp/YamahaExtendedControl/v1/$ZoneId/setVolume?volume=\" + (Math.round(0 + ($VolumeMax - $VolumeMin) * Number($VolumePlayedPercent) / 100).toString())"},
+      "__VOLUMESET":    {"label":"", "type":"http-get", "command":"DYNAMIK \"http://$MusicCastIp/YamahaExtendedControl/v1/$ZoneId/setVolume?volume=\" +( Math.round(($VolumeMax-$VolumeMin)*Number($VolumePlayedPercent)/100 - Number($VolumePlayedTotal)) >= Number(\"$SetVolumeLimit\"==\"none\"?$VolumeMax:$SetVolumeLimit) ? (Number($VolumePlayedTotal) + Number($SetVolumeLimit)).toString() : Math.round(($VolumeMax-$VolumeMin)*Number($VolumePlayedPercent)/100).toString() )"},
       "__PROGRESSSET":  {"label":"", "type":"http-get", "command":"DYNAMIK \"http://$MusicCastIp/YamahaExtendedControl/v1/netusb/setPlayPosition?position=\"+String(Math.round(Number($TotalTime)*Number($Progress)/100))", "queryresult":"$.response_code", "evalwrite":[{"variable":"ActStatus","value":"DYNAMIK ($Result==0) ? \"PROGRESS set\" : \"Command Failed\" "}]},
       "__DIMMERSET":    {"label":"UNDER CONSTRUCTION"},
 
@@ -523,8 +524,21 @@
       "Settings": {"label":"","feeders": {
         "Settings":{"label":"", "commandset": [
           {"type":"static", "command":"{}", "itemtype":"tile", "itemaction":"", "itemimage":"DYNAMIK (\"$IconBaseUrl/yamaha_mc.png\").replace(/ /g, \"%20\")"},
-          {"type":"static", "command":[{"name":"Status Label", "label":"Customize the Status Label", "navigation":"Status Label"}], "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/label_abc.png\").replace(/ /g, \"%20\")", "itemUI":"reload", "evalnext":[{"test":true, "then":"Status Label", "or":""}]},
-          {"type":"static", "command":[{"name":"Theme",      "label":"Choose an Icon Set",       "navigation":"Theme"}],      "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/theme.png\").replace(/ /g, \"%20\")",     "itemUI":"reload", "evalnext":[{"test":true, "then":"Theme",      "or":""}]}
+          {"type":"static", "command":[
+            {"name":"Status Label", "label":"Customize the Status Label",    "image":"label_abc","navigation":"Status Label"},
+            {"name":"Theme",        "label":"Choose an Icon Set",            "image":"theme",    "navigation":"Theme"},
+            {"name":"Volume Slider","label":"Limit the max. Volume increase","image":"volume",   "navigation":"Volume Slider"}], 
+            "queryresult":"$.*",
+            "itemname":   "DYNAMIK JSON.parse(\"$Result\").name",
+            "itemlabel":  "DYNAMIK JSON.parse(\"$Result\").label",
+            "itemimage":  "DYNAMIK (\"$IconBaseUrl/\" + JSON.parse(\"$Result\").image + \".png\").replace(/ /g, \"%20\")",
+            "itemUI":     "reload",
+            "evalnext":[
+              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Status Label\")", "then":"Status Label", "or":""},
+              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Theme\")",        "then":"Theme",        "or":""},
+              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Volume Slider\")","then":"Volume Slider","or":""}
+            ]      
+          }
         ]},
         "Status Label":{"label":"", "commandset": [
           {"type":"static", "command":[{"name":"Track",       "label":"For Example: Rocket Man"}],   "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatTrack      ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"SetStatTrack" ,     "value":"DYNAMIK $SetStatTrack      ?false:true "}]},
@@ -537,6 +551,9 @@
         ]},
         "Theme":{"label":"", "commandset": [
           {"type":"static", "command":[{"name":"Yamaha AVR Classic","label":"Default Icon Set","link":"Yamaha AVR Classic"},{"name":"Yamaha AVR Modern","label":"Icon Set Under Construction","link":"Yamaha AVR Modern"}], "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/radio_button_\" + ( \"$Theme\"==JSON.parse(\"$Result\").link?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"Theme", "value":"DYNAMIK JSON.parse(\"$Result\").link"}]}
+        ]},
+        "Volume Slider":{"label":"", "commandset": [
+          {"type":"static", "command":[{"name":"None","limit":"none"},{"name":"1","limit":"1"},{"name":"5","limit":"5"},{"name":"10","limit":"10"},{"name":"20","limit":"20"},{"name":"25","limit":"25"},{"name":"50","limit":"50"}], "queryresult":"$.*", "itemname":"DYNAMIK \"Limit: \"+JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"Limit the max. Volume increase", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/radio_button_\" + ( \"$SetVolumeLimit\"==JSON.parse(\"$Result\").limit?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"SetVolumeLimit", "value":"DYNAMIK JSON.parse(\"$Result\").limit"}]}
         ]},
         "Persist":{"label":"", "commandset": [
           {"type":"static", "command":".", "evaldo":[{"test":true, "then":"__PERSIST", "or":""}]}
