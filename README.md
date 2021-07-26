@@ -25,7 +25,7 @@ In Case the "Scanning" hangs up at a certain Percentage: Repeat the Process star
 ## How to use the Driver
 ### Discovery and Device Name
 The Driver will automatically find and list your Yamaha AVR and MusicCast Devices in the Discovery Process (Step 9 of "How to Install the Driver").
-The Device Names will be generated from "Model Name" + "Room Name". Hereby the Room Name will be used that was previously set in the official Yamaha MusicCast App. The generated Names will also show up in the Directory "MusicCast Link" (Multiroom Audio).
+The Device Names will be generated from "Model Name" + "Room Name". Hereby the Room Name will be used that was previously set in the official Yamaha MusicCast App (The Default is "Room"). The generated Names will also show up in the Directory "MusicCast Link" (Multiroom Audio).
 
 If you don't like the generated Name you can:
 
