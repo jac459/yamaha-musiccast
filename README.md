@@ -66,7 +66,20 @@ The Slider might show "full blast" for a second or two but it will refresh to th
 - Changed queryresult for PreSelection
 - New Setting: Volume Slider - Limit the max. Volume increase
 
+### Version 12
+- Discovery Process: Using more general pre filtering to increase Chances of finding Devices; Speeding up Discovery by only enriching if necessary.
+- MusicCast Link: Now automatically sending "Power off" to Client after removing from Group.
+
 ## ToDos
 - Finish the Directory "Media Browser" to browse and select Music that is directly available to the AVR or MusicCast Device. For Example: Qobuz, Tidal, Servers (NAS/ DLNA), USB-Sticks, Net Radio, etc.
 - Finish the "Dimmer" Feature to change the Display Brightness of an AVR (Update of meta required to support xml Messages). 
 - Finish the Icon Set "Yamaha AVR Modern"
+
+## Yamaha API
+This Driver uses the following Yamaha API for Communication:
+
+Yamaha API Basic (API for basic control of AVRs and MusicCast Devices):\
+https://github.com/jac459/yamaha-musiccast/blob/main/yamaha_api/YXC_API_Spec_Basic_Rev_2.00.pdf
+
+Yamaha API Advanced (additional API for MusicCast specific commands like creating Groups):\
+https://github.com/jac459/yamaha-musiccast/blob/main/yamaha_api/YXC_API_Spec_Advanced_Rev_2.00.pdf
