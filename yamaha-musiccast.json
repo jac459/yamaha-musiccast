@@ -1,7 +1,7 @@
 { "name":"MusicCast",
   "manufacturer":"Yamaha",
   "type":"AVRECEIVER",
-  "version":11,
+  "version":12,
   "compatible-meta":"1.0.2b",
   "persistedvariables":{
     "ToInitiate":true,
@@ -21,24 +21,27 @@
       "type":"http-get", "command":"DYNAMIK let pre = $PreSelection; \"http://\" + pre[$Iterator].ip + \"/YamahaExtendedControl/v1/system/getDeviceInfo\" ", 
       "queryresult":"$.",
       "evalwrite":[
-        {"variable":"Check",    "value": "DYNAMIK let ml = JSON.parse(\"$MusicCastList\"); let pre = $PreSelection; \"$Result\" != \"undefined\" ? ((JSON.parse(\"$Result\").response_code == 0 && ml.findIndex(i => i.ip == pre[$Iterator].ip) == -1) ? true : false) : false"},
-        {"variable":"ModelName","value": "DYNAMIK $Check ? JSON.parse(\"$Result\").model_name : \"\" "},
-        {"variable":"DeviceId", "value": "DYNAMIK $Check ? JSON.parse(\"$Result\").device_id  : \"\" "}
+        {"variable":"Check",     "value": "DYNAMIK let ml = JSON.parse(\"$MusicCastList\"); let pre = $PreSelection; \"$Result\" != \"undefined\" ? ((JSON.parse(\"$Result\").response_code == 0 && ml.findIndex(i => i.ip == pre[$Iterator].ip) == -1) ? true : false) : false"},
+        {"variable":"ModelName", "value": "DYNAMIK $Check ? JSON.parse(\"$Result\").model_name : \"\" "},
+        {"variable":"DeviceId",  "value": "DYNAMIK $Check ? JSON.parse(\"$Result\").device_id  : \"\" "},
+        {"variable":"Iterator",  "value": "DYNAMIK $Check ? $Iterator : Number($Iterator)+1"}
       ], 
       "evaldo":[
-        {"test":true, "then":"__ENRICH", "or":""}
+        {"test":"DYNAMIK $Check", "then":"__ENRICH", "or":""},
+        {"test":"DYNAMIK $Iterator == $NumDevicesFound && $Check == false", "then":"__PERSIST", "or":""},
+        {"test":"DYNAMIK let pre = $PreSelection; let b = Number($Iterator) < pre.length; b && $Check==false;", "then":"__CHECK", "or":""}
       ]
     },
     "__ENRICH":  {"label":"",
       "type":"http-get", "command":"DYNAMIK let pre = $PreSelection; \"http://\" + pre[$Iterator].ip + \"/YamahaExtendedControl/v1/system/getNameText\" ", 
       "queryresult":"$.zone_list.0.", 
       "evalwrite":[
-        {"variable":"MusicCastList", "value":"DYNAMIK let ml = JSON.parse(\"$MusicCastList\"); let pre = $PreSelection; if (\"$Check\"==\"true\") {pre[$Iterator].model_name = \"$ModelName\"; pre[$Iterator].room_name = JSON.parse(\"$Result\").text; pre[$Iterator].device_id = \"$DeviceId\"; ml.push(pre[$Iterator]); let sml = JSON.stringify(JSON.stringify(ml)); sml.substring(1, sml.length-1)} else {let sml = JSON.stringify(JSON.stringify(ml)); sml.substring(1, sml.length-1)};"},
-        {"variable":"Iterator",  "value":"DYNAMIK Number($Iterator)+1 "}
+        {"variable":"MusicCastList", "value": "DYNAMIK let ml = JSON.parse(\"$MusicCastList\"); let pre = $PreSelection; if (\"$Check\"==\"true\") {pre[$Iterator].model_name = \"$ModelName\"; pre[$Iterator].room_name = JSON.parse(\"$Result\").text; pre[$Iterator].device_id = \"$DeviceId\"; ml.push(pre[$Iterator]); let sml = JSON.stringify(JSON.stringify(ml)); sml.substring(1, sml.length-1)} else {let sml = JSON.stringify(JSON.stringify(ml)); sml.substring(1, sml.length-1)};"},
+        {"variable":"Iterator",      "value": "DYNAMIK Number($Iterator)+1 "}
       ],
       "evaldo":[
-        {"test":"DYNAMIK let pre = $PreSelection; let b = Number($Iterator) < pre.length; b;", "then":"__CHECK", "or":""},
-        {"test":"DYNAMIK $Iterator == $NumDevicesFound", "then":"__PERSIST", "or":""}
+        {"test":"DYNAMIK $Iterator == $NumDevicesFound", "then":"__PERSIST", "or":""},
+        {"test":"DYNAMIK let pre = $PreSelection; let b = Number($Iterator) < pre.length; b;", "then":"__CHECK", "or":""}
       ]
     }
   },
@@ -46,9 +49,9 @@
     "welcomeheadertext":"Yamaha AVR and MusicCast Driver",
     "welcomedescription":"powered by meta v2 \n by JAC459 \n X \n Driver Development \n by MarkusM",
     "initcommandset":[
-      {"type":"mDNS", "command":"", "queryresult":["$.[?(@property === \"short\" && @.match(/_http._tcp.local$/i))]^"], "evalwrite":[{"variable":"PreSelection","value":"DYNAMIK let l = JSON.parse(\"$Result\"); JSON.stringify(l.filter(item=>{return item.ip!=undefined}))"}, {"variable":"NumDevicesFound","value":"DYNAMIK $PreSelection.length"}, {"variable":"ToInitiate","value":false}], "evaldo":[{"test":true, "then":"__CHECK", "or":""}, {"test":true, "then":"__PERSIST", "or":""}]}
+      {"type":"mDNS", "command":"", "queryresult":["$.[?(@property === \"short\" && @.match(/_tcp.local$/i))]^"], "evalwrite":[{"variable":"PreSelection","value":"DYNAMIK let l = JSON.parse(\"$Result\"); JSON.stringify(l.filter(item=>{return item.ip!=undefined}))"}, {"variable":"NumDevicesFound","value":"DYNAMIK $PreSelection.length"}, {"variable":"ToInitiate","value":false}], "evaldo":[{"test":true, "then":"__CHECK", "or":""}, {"test":true, "then":"__PERSIST", "or":""}]}
     ],
-    "command": {"type":"static", "command":"DYNAMIK if ($NumDevicesFound == $Iterator) {JSON.parse(\"$MusicCastList\")} else if ($NumDevicesFound == \"0\") {[{\"room_name\":\"No devices found in pre filtering.\", \"model_name\":\"\", \"ip\":\"Not Found\"}]} else {let res = [{\"room_name\":\"\", \"model_name\":\"\", \"ip\":\"Not Found\"}]; res[0].room_name = \"Scanning \" + Math.round(Number($Iterator)/(Number($NumDevicesFound)-1)*100) + \"% - Please Refresh List\"; res;}",
+    "command": {"type":"static", "command":"DYNAMIK if ($Iterator == $NumDevicesFound) {JSON.parse(\"$MusicCastList\")} else if ($NumDevicesFound == \"0\") {[{\"room_name\":\"No devices found in pre filtering.\", \"model_name\":\"\", \"ip\":\"Not Found\"}]} else {let res = [{\"room_name\":\"\", \"model_name\":\"\", \"ip\":\"Not Found\"}]; res[0].room_name = \"Scanning \" + Math.round(Number($Iterator)/(Number($NumDevicesFound)-1)*100) + \"% - Please Refresh List\"; res;}",
       "queryresult":"$.*"}
   },
   "template":{
@@ -500,7 +503,7 @@
       }},
       "MusicCast Link": {"label":"", "feeders": {
         "MusicCast Link":{"label":"", "commandset":[{
-          "type":"static", "command":"DYNAMIK $MusicCastLinkIsLocked==true ? [{\"name\":\"MusicCast Link is Locked\"}] : JSON.stringify($MusicCastDevices.filter(i=>i.ip!=\"$MusicCastIp\")) ",
+          "type":"static", "command":"DYNAMIK $MusicCastLinkIsLocked==true ? [{\"model_name\":\"\"}] : JSON.stringify($MusicCastDevices.filter(i=>i.ip!=\"$MusicCastIp\")) ",
           "queryresult":"$.*", 
           "itemname":   "DYNAMIK $MusicCastLinkIsLocked==true ? \"MusicCast Link is Locked\" : JSON.parse(\"$Result\").model_name + \" \" + JSON.parse(\"$Result\").room_name",
           "itemlabel":  "DYNAMIK $MusicCastLinkIsLocked==true ? \"This Device is a Client of a Group\" : ($MusicCastClientList.includes(JSON.parse(\"$Result\").ip) ?\"Remove this Device\":\"Add this Device\") ", 
@@ -511,13 +514,13 @@
             {"variable":"MusicCastClientIp", "value":"DYNAMIK $MusicCastLinkIsLocked==true ? \"\" : JSON.parse(\"$Result\").ip"},
             {"variable":"MusicCastClientAdd","value":"DYNAMIK $MusicCastLinkIsLocked==true ? \"\" : $MusicCastClientList.includes(\"$MusicCastClientIp\")?false:true"},
             {"variable":"MusicCastDistStop" ,"value":"DYNAMIK $MusicCastLinkIsLocked==true ? \"\" : $MusicCastClientList.toString()==\"$MusicCastClientIp\"&&$MusicCastClientAdd==false?true:false"},
-            {"variable":"ActStatus",         "value":"DYNAMIK $MusicCastLinkIsLocked==true ? \"\" : (($MusicCastClientList.includes(JSON.parse(\"$Result\").ip)?\"Removing Client: \":\"Adding Client: \") + JSON.parse(\"$Result\").name) "}
+            {"variable":"ActStatus",         "value":"DYNAMIK $MusicCastLinkIsLocked==true ? \"\" : (($MusicCastClientList.includes(JSON.parse(\"$Result\").ip)?\"Removing Client: \":\"Adding Client: \") + JSON.parse(\"$Result\").model_name + \" \" + JSON.parse(\"$Result\").room_name) "}
           ]
         }]},
         "AddOrRemoveDevice":{"label":"", "commandset":[
           {"type":"http-rest","command":"DYNAMIK \" {\\\"verb\\\":\\\"post\\\",\\\"call\\\":\\\"http://$MusicCastIp/YamahaExtendedControl/v1/dist/setServerInfo\\\"      ,\\\"message\\\":{\\\"group_id\\\":\\\"$MusicCastGroupID\\\",\\\"zone\\\":\\\"main\\\",\\\"type\\\":\\\"\"+(\"$MusicCastClientAdd\"==\"true\"?\"add\":\"remove\")+\"\\\",\\\"client_list\\\":[\\\"$MusicCastClientIp\\\"]}} \" "},
           {"type":"http-rest","command":"DYNAMIK \" {\\\"verb\\\":\\\"post\\\",\\\"call\\\":\\\"http://$MusicCastClientIp/YamahaExtendedControl/v1/dist/setClientInfo\\\",\\\"message\\\":{\\\"group_id\\\":\\\"\"+(\"$MusicCastClientAdd\"==\"true\"?\"$MusicCastGroupID\":\"\")+\"\\\",\\\"zone\\\":[\\\"main\\\"]}} \" "},
-          {"type":"http-get", "command":"http://$MusicCastClientIp/YamahaExtendedControl/v1/main/setPower?power=on", "queryresult":"$.response_code", "evalwrite":[{"variable":"ActStatus", "value":"DYNAMIK ($Result==0)?\"Device On\":\"command Failed\""}]},
+          {"type":"http-get", "command":"DYNAMIK \"http://$MusicCastClientIp/YamahaExtendedControl/v1/main/setPower?power=\" + (\"$MusicCastClientAdd\"==\"true\"?\"on\":\"standby\") "},
           {"type":"http-get", "command":"DYNAMIK \"http://$MusicCastIp/YamahaExtendedControl/v1/dist/\" + (\"$MusicCastDistStop\"==\"false\"?\"startDistribution?num=0\":\"stopDistribution\") "}
         ]}
       }},
