@@ -3,7 +3,7 @@ Advanced Driver to control Yamaha AVRs and Musiccast Devices using meta v2 and t
 
 ## How to Install the Driver
 ### a) Installation via meta-core Driver
-Video Instruction: https://youtu.be/OeC-59XX7t0
+Video Instructions: https://youtu.be/OeC-59XX7t0
 
 0. Install the meta-core Driver and create the Shortcut for the Directory "Settings"
 1. Open the Directory "Settings"
@@ -14,7 +14,7 @@ Video Instruction: https://youtu.be/OeC-59XX7t0
 6. Open the NEEO App and go to "Add new Device"
 7. Search for "meta" or "musiccast"
 3. Select the Driver "Yamaha MusicCast"
-9. Follow the Instruction in the App to install your Device to Your NEEO System.
+9. Follow the Instructions in the App to install your Device to Your NEEO System.
 
 In Case the "Scanning" hangs up at a certain Percentage: Repeat the Process starting at Step 7 and refresh the List less often - In the worst Case wait 30sec or more then refresh just once.
  
@@ -32,6 +32,8 @@ If you don't like the generated Name you can:
 a) Rename the Device in the NEEO App (this will not affect the Names in "MusicCast Link")\
 b) Rename the Room in the official Yamaha MusicCast App and repeat the Discovery Process starting at Step 7.
 
+Note: The Driver will be installed for the specific Device selected. If you have multiple Devices you can install all of them one after the other.
+
 ### Notable Features/ Shortcuts of the Driver
 Use Your NEEO App to add whatever Shortcuts you need to a Recipe. However the following Features deserve a special mentioning and some extra explanation.
 
@@ -39,8 +41,23 @@ Use Your NEEO App to add whatever Shortcuts you need to a Recipe. However the fo
 Readme under Construction
 
 #### MusicCast Link
-Readme under Construction\
-Notice: The current Device (potential Master) is not aware of the existance of other Groups. To be more percise: Lets assume you have Devices A, B, C. B and C are linked. A is your current Device (potential Master). If you open the "MusicCast Link" the Devices B and C appear as they were not grouped.
+With this Directory you can create Multiroom Audio Groups. The following Terminology is used:\
+
+Master: A Master is the Device/ Room the Audio Distribution comes from. The Master is determined by the active Recipe/ current Device.\
+Client: A Client is a Device/ Room that is linked to a Master.
+
+For creating a Group open the Directory "MusicCast Link". You will be presented with a List of your Devices. The Devices shown can be added as Clients to create a Multiroom Audio Group. The List will obviously not contain the Device of the active Recipe as this Device will be the Master.
+
+The Icons and Labels in this Directory will indicate the Status of the Clients. The Labels will either show "Add this Device" or "Remove this Device". For convenience: If you add a Client to a Group it will be automatically turned on. Also if you remove a Client from a Group the Device will be turned off. This means you don't necessarily have to activate a Recipe for each Device. 
+
+The Volume Control/ Slider is connected to the specific Device of the active Recipe due to the Device specific Installation of the Driver. If you want to change the Volume of a Client activate the according Recipe and change the Volume there.
+Also you can use the Shortcut "Device Manager" to change the Device your active Recipe is in Control of. As all UI Elements of your active Recipe will be redirected to the selected Device you can use the Volume Slider in the active Recipe.
+
+Notice: The current Device (potential Master) is not aware of the existance of other Groups. To be more percise: Lets assume Devices A, B, C exist. B and C are linked. A is the current Device (potential Master). When the Directory "MusicCast Link" is opened the Devices B and C appear as they were not grouped.
+
+#### Device Manager
+This is a Tool that came in particularly useful during the Driver's Development. The "Device Manager" redirects all UI Elements/ Shortcuts (Including: Album Art, Status Label, MusicCast Link, etc.) of you active Recipe to a different Yamaha Device that was found during Discovery. The Directory is presenting a List of Devices to take Control of.\
+Please use this Tool sensibly as it can lead to unexpected Behaviour. For Example turning the active Recipe off will power off the Device selected in the Directory, not the Device that was originally activated.
 
 #### Media Browser
 Feature and Readme under Construction
