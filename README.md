@@ -1,6 +1,10 @@
 # yamaha-musiccast
 Advanced Driver to control Yamaha AVRs and Musiccast Devices using meta v2 and the NEEO Remote.
 
+#### Device Compatibility
+This Driver uses the "Yamaha API" which was first issued in ~2016. The Compatibility of your Device is automatically checked during the "Scanning Process" in Step 9 of the instructions below. All your compatible Devices will be listed for installation.\
+However you can also check the Compatibility manually. For this open a Webbrwoser of Your Choice and type the following into the Adress Line: `http://{host}/YamahaExtendedControl/v1/system/getDeviceInfo` . If you get a Response stating the Modell Name and API Version your Device is compatible.
+
 ## How to Install the Driver
 ### a) Installation via meta-core Driver
 Video Instructions: https://youtu.be/OeC-59XX7t0
@@ -13,7 +17,7 @@ Video Instructions: https://youtu.be/OeC-59XX7t0
 5. Restart meta
 6. Open the NEEO App and go to "Add new Device"
 7. Search for "meta" or "musiccast"
-3. Select the Driver "Yamaha MusicCast"
+8. Select the Driver "Yamaha MusicCast"
 9. Follow the Instructions in the App to install your Device to Your NEEO System.
 
 In Case the "Scanning" hangs up at a certain Percentage: Repeat the Process starting at Step 7 and refresh the List less often - In the worst Case wait 30sec or more then refresh just once.
