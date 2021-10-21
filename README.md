@@ -3,7 +3,7 @@ Advanced Driver to control Yamaha AVRs and Musiccast Devices using meta v2 and t
 
 #### Device Compatibility
 This Driver uses the "Yamaha API" which was first issued in ~2016. The Compatibility of your Device is automatically checked during the "Scanning Process" in Step 9 of the instructions below. All your compatible Devices will be listed for installation.\
-However you can also check the Compatibility manually. For this open a Webbrwoser of Your Choice and type the following into the Adress Line: `http://{host}/YamahaExtendedControl/v1/system/getDeviceInfo` . If you get a Response stating the Modell Name and API Version your Device is compatible.
+However, you can also check the Compatibility manually. For this open a Webbrowser of Your Choice and type the following into the Address Line: `http://{host}/YamahaExtendedControl/v1/system/getDeviceInfo` . If you get a Response stating the Model Name and API Version your Device is compatible.
 
 ## How to Install the Driver
 ### a) Installation via meta-core Driver
