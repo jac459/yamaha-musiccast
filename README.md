@@ -41,8 +41,8 @@ Note: The Driver will be installed for the specific Device selected. If you have
 ### Notable Features/ Shortcuts of the Driver
 Use Your NEEO App to add whatever Shortcuts you need to a Recipe. However the following Features deserve a special mentioning and some extra explanation.
 
-#### DSP
-Readme under Construction
+#### DSP / Surround Decoder
+Select the DSP and/ or Surround Decoder. The Directories are only displaying the DSPs/Surround Decoders that are actually available on the active Device.
 
 #### MusicCast Link
 With this Directory you can create Multiroom Audio Groups. The following Terminology is used:\
@@ -67,17 +67,17 @@ Please use this Tool sensibly as it can lead to unexpected Behaviour. For Exampl
 Feature and Readme under Construction
 
 #### Settings
-Change the Settings of this Driver. The Settings are stored (persisted) per Device.
+Change the Settings of this Driver. The Settings are stored (persisted) per Device. The following Options are available:
 
-##### Status Label
+###### Status Label
 Customize the Status Label by activating or deactivating the Elements: Track, Artist, Album, Time, Progress, Audio Format, Volume
 
-##### Theme  
+###### Theme  
 Choose an Icon Set from a List. (The Icon Set "Yamaha AVR Modern" is under Construction)
 
-##### Volume Slider
+###### Volume Slider
 This is a safety Feature that can prevent Yourself from damaging your Equipment or Ears. Select the maximum Volume Steps that are allowed when increasing the Volume via the Volume Slider. If you then "accitendly" move the Slider to "full blast", the Volume will only increase by the selected amount.\
-The Slider might show "full blast" for a second or two but it will refresh to the actual Volume increase.
+The Slider might show "full blast" for a second or two but it will refresh to the actual Volume increase. However, if you want to increase the Volume by more than the set Value, simply tap the right side of the Slider several times.
 
 ## Versions
 ### Version 10
