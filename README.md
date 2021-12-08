@@ -20,7 +20,7 @@ Video Instructions: https://youtu.be/OeC-59XX7t0
 8. Select the Driver "Yamaha MusicCast"
 9. Follow the Instructions in the App to install your Device to Your NEEO System.
 
-In Case the "Scanning" hangs up at a certain Percentage: Repeat the Process starting at Step 7 and refresh the List less often - In the worst Case wait 30sec or more then refresh just once.
+In Case the "Checking" hangs up at a certain Number: Repeat the Process starting at Step 7 and refresh the List less often - In the worst Case wait 30sec or more then refresh just once (maybe also the DataStore.json has to be cleared).
  
 ### b) Manual Installation
 1. Download the File "yamaha-musiccast.json" from this Repository to the Subfolder "active" of your meta Installation.
@@ -64,7 +64,9 @@ This is a Tool that came in particularly useful during the Driver's Development.
 Please use this Tool sensibly as it can lead to unexpected Behaviour. For Example turning the active Recipe off will power off the Device selected in the Directory, not the Device that was originally activated.
 
 #### Media Browser
-Feature and Readme under Construction
+The Directory "Media Browser" allows to browse and select Music that is directly available to the AVR or MusicCast Device. For Example: Qobuz, Tidal, Servers (NAS/ DLNA), USB-Sticks, Net Radio, etc.\
+The basic Structure of the Browser resambles the Media Browser that is known from the Yamaha User Interface (Webcontrol/ On Screen Bowser). The Browser will load 8 Items of the  selected Level. A Banner on Top of the List shows information about the current Level Name and the current Page as well as the available Pages on that Level.\
+The Buttons "Page Up" and "Page Down" will load the next 8 Items of the Level. By selecting a folder the folder will be opend. By pressing the Button "Back" the privious Level will be displayed. By selecting a (selectable) File the Playback will start. The current implementation only supports direct File Playback (No playback next/ No add to queue).
 
 #### Settings
 Change the Settings of this Driver. The Settings are stored (persisted) per Device. The following Options are available:
@@ -91,8 +93,22 @@ The Slider might show "full blast" for a second or two but it will refresh to th
 - Discovery Process: Using more general pre filtering to increase Chances of finding Devices; Speeding up Discovery by only enriching if necessary.
 - MusicCast Link: Now automatically sending "Power off" to Client after removing from Group.
 
+### Version 13
+*- no official release*
+
+### Version 14
+- Media Browser: First Release
+- Scanning Process: 
+ - Improved how the the progress of Scanning is displayed (from: "Scanning X% - Please Refresh..." to: "Checking X/Y - Please Refresh...")
+ - Improved the Pre Filtering (Only Checking Devices that are listed with Port 80 and 5000)
+ - Speeding up the Scanning/ Checking Process by Removing duplicate IP adresses.
+- Musiccast Link: Changed to Albumart that is displayed when a Device is a Client in a Group.
+- Input Directory: The Directory will now close after selecting an Input
+- Other minor Improvements
+
+
 ## ToDos
-- Finish the Directory "Media Browser" to browse and select Music that is directly available to the AVR or MusicCast Device. For Example: Qobuz, Tidal, Servers (NAS/ DLNA), USB-Sticks, Net Radio, etc.
+- Further Improve the Directory "Media Browser" (Add: playback next/ add to queue, show Playlist)
 - Finish the "Dimmer" Feature to change the Display Brightness of an AVR (Update of meta required to support xml Messages). 
 - Finish the Icon Set "Yamaha AVR Modern"
 
