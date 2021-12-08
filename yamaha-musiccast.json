@@ -580,13 +580,12 @@
           "type":"http-get", "command":"http://$MusicCastIp/YamahaExtendedControl/v1/netusb/getListInfo?input=$Input&index=0&size=8&lang=en", 
           "queryresult":"$.",
           "itemtype":   "button",
-          "itemname":   "DYNAMIK JSON.parse(\"$Result\").menu_name + \" - Page \" + Math.ceil(Number(($MediaBrowserOffset==undefined?0:$MediaBrowserOffset) / 8 + 1)) + \"/\" + Math.ceil(Number(JSON.parse(\"$Result\").max_line / 8))",
+          "itemname":   "DYNAMIK let t=$TransInputName.filter(i => (i.id == \"$Input\")); JSON.parse(\"$Result\").list_info[0] == undefined ? (\"No Content for Input: \"+t[0].text) : (JSON.parse(\"$Result\").menu_name + \" - Page \" + Math.ceil(Number(($MediaBrowserOffset==undefined?0:$MediaBrowserOffset) / 8 + 1)) + \"/\" + Math.ceil(Number(JSON.parse(\"$Result\").max_line / 8)))",
           "itemUI":     true,
           "itemaction": ""
           },{
-          "type":"static", "command":"[{\"text\":\"Back\"}]", 
-          "queryresult":"$.*",
-          "itemname":   "DYNAMIK JSON.parse(\"$Result\").text",
+          "type":"static", "command":".", 
+          "itemname":   "Back",
           "itemimage":  "DYNAMIK (\"$IconBaseUrl/$Theme/menu_back.png\").replace(/ /g, \"%20\")",
           "itemaction": "",
           "evalwrite":[
@@ -595,9 +594,8 @@
           "evalnext":[{"test":true, "then":"Media Browser", "or":""}],
           "evaldo":  [{"test":true, "then":"__MediaBrowserBack", "or":""},{"test":true, "then":"__MediaBrowserLevelInfo", "or":""}]
           },{
-          "type":"static", "command":"[{\"text\":\"Page Up\"}]", 
-          "queryresult":"$.*",
-          "itemname":   "DYNAMIK JSON.parse(\"$Result\").text",
+          "type":"static", "command":".", 
+          "itemname":   "Page Up",
           "itemimage":  "DYNAMIK (\"$IconBaseUrl/$Theme/arrows_up.png\").replace(/ /g, \"%20\")",
           "itemaction": "",
           "evalwrite":[{"variable": "MediaBrowserOffset", "value":"DYNAMIK 0 > Number($MediaBrowserOffset - 8) ? (Math.floor(Number($MediaBrowserMaxLine / 8))*8) : Number($MediaBrowserOffset - 8)"}],
@@ -618,9 +616,8 @@
           "evalnext": [{"test":"DYNAMIK let a = JSON.parse(\"$Result\").attribute; (a >> 1 & 1) === 1", "then":"Media Browser", "or":""}],
           "evaldo":   [{"test":"DYNAMIK let a = JSON.parse(\"$Result\").attribute; (a >> 1 & 1) === 1", "then":"__MediaBrowserSet", "or":""},{"test":true, "then":"__MediaBrowserLevelInfo", "or":""}]
           },{
-          "type":"static", "command":"[{\"text\":\"Page Down\"}]", 
-          "queryresult":"$.*",
-          "itemname":   "DYNAMIK JSON.parse(\"$Result\").text",
+          "type":"static", "command":".", 
+          "itemname":   "Page Down",
           "itemimage":  "DYNAMIK (\"$IconBaseUrl/$Theme/arrows_down.png\").replace(/ /g, \"%20\")",
           "itemaction": "",
           "evalwrite":[{"variable": "MediaBrowserOffset", "value":"DYNAMIK $MediaBrowserMaxLine < Number($MediaBrowserOffset + 8) ? 0 : Number($MediaBrowserOffset + 8)"}],
