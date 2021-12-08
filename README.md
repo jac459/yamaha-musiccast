@@ -99,9 +99,9 @@ The Slider might show "full blast" for a second or two but it will refresh to th
 ### Version 14
 - Media Browser: First Release
 - Scanning Process: 
- - Improved how the the progress of Scanning is displayed (from: "Scanning X% - Please Refresh..." to: "Checking X/Y - Please Refresh...")
- - Improved the Pre Filtering (Only Checking Devices that are listed with Port 80 and 5000)
- - Speeding up the Scanning/ Checking Process by Removing duplicate IP adresses.
+  - Improved how the the progress of Scanning is displayed (from: "Scanning X% - Please Refresh..." to: "Checking X/Y - Please Refresh...")
+  - Improved the Pre Filtering (Only Checking Devices that are listed with Port 80 and 5000)
+  - Speeding up the Scanning/ Checking Process by Removing duplicate IP adresses.
 - Musiccast Link: Changed to Albumart that is displayed when a Device is a Client in a Group.
 - Input Directory: The Directory will now close after selecting an Input
 - Other minor Improvements
