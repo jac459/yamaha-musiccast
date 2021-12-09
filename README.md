@@ -27,14 +27,13 @@ In Case the "Checking" hangs up at a certain Number: Repeat the Process starting
 2. Follow the Instructions above starting at Step 5.
 
 ## How to use the Driver
-### Discovery and Device Name
-The Driver will automatically find and list your Yamaha AVR and MusicCast Devices in the Discovery Process (Step 9 of "How to Install the Driver").
+### Finding your Yamaha AVR/ MusicCast Device and its Name
+The Driver will automatically find and list your Yamaha AVR and MusicCast Devices during the Installation Process (Step 9 of "How to Install the Driver"). For this purpose, a Selection of the IP Addresses is used that the meta Driver has collected with the help of the so-called "Discovery Process".
 The Device Names will be generated from "Model Name" + "Room Name". Hereby the Room Name will be used that was previously set in the official Yamaha MusicCast App (The Default is "Room"). The generated Names will also show up in the Directory "MusicCast Link" (Multiroom Audio).
 
-If you don't like the generated Name you can:
-
+If you don't like the generated Name you can:\
 a) Rename the Device in the NEEO App (this will not affect the Names in "MusicCast Link")\
-b) Rename the Room in the official Yamaha MusicCast App and repeat the Discovery Process starting at Step 7.
+b) Rename the Room in the official Yamaha MusicCast App and repeat the Installation Process starting at Step 7.
 
 Note: The Driver will be installed for the specific Device selected. If you have multiple Devices you can install all of them one after the other.
 
@@ -45,7 +44,7 @@ Use Your NEEO App to add whatever Shortcuts you need to a Recipe. However the fo
 Select the DSP and/ or Surround Decoder. The Directories are only displaying the DSPs/Surround Decoders that are actually available on the active Device.
 
 #### MusicCast Link
-With this Directory you can create Multiroom Audio Groups. The following Terminology is used:\
+With this Directory you can create Multiroom Audio Groups. The following Terminology is used:
 - Master: A Master is the Device/ Room the Audio Distribution comes from. The Master is determined by the active Recipe/ current Device.
 - Client: A Client is a Device/ Room that is linked to a Master.
 
