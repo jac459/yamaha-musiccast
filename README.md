@@ -100,7 +100,7 @@ The following Buttons/ Shortcuts are currently only placeholders and have no con
 - MusicCast Link: Now automatically sending "Power off" to Client after removing from Group.
 
 ### Version 13
-*- no official release*
+- *no official release*
 
 ### Version 14
 - Media Browser: First Release
@@ -111,6 +111,10 @@ The following Buttons/ Shortcuts are currently only placeholders and have no con
 - Musiccast Link: Changed the Albumart that is displayed when a Device is a Client in a Group.
 - Input Directory: The Directory will now close after selecting an Input
 - Other minor Improvements
+
+### Version 15
+- Media Browser: Improved when to show Banner "No Content for Input: XY"
+- *[Button "Dimmer 0": slightly changed Code but still under Construction]*
 
 ## ToDos
 - Further Improve the Directory "Media Browser" (Add: playback next/ add to queue, show Playlist)
