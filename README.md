@@ -46,9 +46,8 @@ Select the DSP and/ or Surround Decoder. The Directories are only displaying the
 
 #### MusicCast Link
 With this Directory you can create Multiroom Audio Groups. The following Terminology is used:\
-
-Master: A Master is the Device/ Room the Audio Distribution comes from. The Master is determined by the active Recipe/ current Device.\
-Client: A Client is a Device/ Room that is linked to a Master.
+- Master: A Master is the Device/ Room the Audio Distribution comes from. The Master is determined by the active Recipe/ current Device.
+- Client: A Client is a Device/ Room that is linked to a Master.
 
 For creating a Group open the Directory "MusicCast Link". You will be presented with a List of your Devices. The Devices shown can be added as Clients to create a Multiroom Audio Group. The List will obviously not contain the Device of the active Recipe as this Device will be the Master.
 
@@ -81,6 +80,14 @@ Choose an Icon Set from a List. (The Icon Set "Yamaha AVR Modern" is under Const
 This is a safety Feature that can prevent Yourself from damaging your Equipment or Ears. Select the maximum Volume Steps that are allowed when increasing the Volume via the Volume Slider. If you then "accitendly" move the Slider to "full blast", the Volume will only increase by the selected amount.\
 The Slider might show "full blast" for a second or two but it will refresh to the actual Volume increase. However, if you want to increase the Volume by more than the set Value, simply tap the right side of the Slider several times.
 
+#### Buttons/ Shortcuts still under Construction
+The following Buttons/ Shortcuts are currently only placeholders and have no confirmed function:
+- Dimmer 0/-1/-2/-3/-4 and Dimmer Slider
+- Input Next/Previous
+- Tuner Band/FM/AM/DAB/Next/Previous
+- Tuning Up/Down
+- Party
+
 ## Versions
 ### Version 10
 - First release
@@ -106,10 +113,10 @@ The Slider might show "full blast" for a second or two but it will refresh to th
 - Input Directory: The Directory will now close after selecting an Input
 - Other minor Improvements
 
-
 ## ToDos
 - Further Improve the Directory "Media Browser" (Add: playback next/ add to queue, show Playlist)
 - Finish the "Dimmer" Feature to change the Display Brightness of an AVR (Update of meta required to support xml Messages). 
+- Finish other Buttons/ Shortcuts that are Listed above as under Construction (or discard them)
 - Finish the Icon Set "Yamaha AVR Modern"
 
 ## Yamaha API
