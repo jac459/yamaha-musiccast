@@ -64,8 +64,8 @@ Please use this Tool sensibly as it can lead to unexpected Behaviour. For Exampl
 
 #### Media Browser
 The Directory "Media Browser" allows to browse and select Music that is directly available to the AVR or MusicCast Device. For Example: Qobuz, Tidal, Servers (NAS/ DLNA), USB-Sticks, Net Radio, etc.\
-The basic Structure of the Browser resambles the Media Browser that is known from the Yamaha User Interface (Webcontrol/ On Screen Bowser). The Browser will load 8 Items of the  selected Level. A Banner on Top of the List shows information about the current Level Name and the current Page as well as the available Pages on that Level.\
-The Buttons "Page Up" and "Page Down" will load the next 8 Items of the Level. By selecting a folder the folder will be opend. By pressing the Button "Back" the privious Level will be displayed (Note: the physical Back Button on the Remote is not supported in this Browser). By selecting a (selectable) File the Playback will start. The current implementation only supports direct File Playback (No playback next/ No add to queue).
+The basic Structure of the Browser resembles the Media Browser that is known from the Yamaha User Interface (Webcontrol/ On Screen Bowser). The Browser will load 8 Items of the  selected Level. A Banner on Top of the List shows information about the current Level Name and the current Page as well as the available Pages on that Level.\
+The Buttons "Page Up" and "Page Down" will load the next 8 Items of the Level. By selecting a Folder the Folder will be opened. By pressing the Button "Back" the previous Level will be displayed (Note: the physical Back Button on the Remote is not supported in this Browser). By selecting a (selectable) File the Playback will start. The current implementation only supports direct File Playback (No playback next/ No add to queue).
 
 #### Settings
 Change the Settings of this Driver. The Settings are stored (persisted) per Device. The following Options are available:
