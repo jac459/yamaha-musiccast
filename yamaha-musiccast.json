@@ -1,7 +1,7 @@
 { "name":"MusicCast",
   "manufacturer":"Yamaha",
   "type":"AVRECEIVER",
-  "version":14,
+  "version":15,
   "compatible-meta":"1.0.4",
   "persistedvariables":{
     "ToInitiate":true,
@@ -347,7 +347,7 @@
 
       "Party": {},
 
-      "Dimmer 0":  {"label":"", "type":"http-rest", "command": {"verb": "post", "call": "http://$MusicCastIp/YamahaRemoteControl/ctrl", "message": "<YAMAHA_AV cmd=\"PUT\"><System><Misc><Display><FL><Dimmer>0</Dimmer></FL></Display></Misc></System></YAMAHA_AV>"} },
+      "Dimmer 0":  {"label":"", "type":"http-rest", "command": "DYNAMIK let req = {\"verb\": \"post\", \"call\": \"http://$MusicCastIp/YamahaRemoteControl/ctrl\", \"headers\":{\"Content-Type\":\"text/xml\",\"Accept-Encoding\":\"gzip, deflate\",\"Host\":\"$MusicCastIp\"}, \"message\": \"\"}; let mes = '<YAMAHA_AV cmd=\"PUT\"><System><Misc><Display><FL><Dimmer>0</Dimmer></FL></Display></Misc></System></YAMAHA_AV>'; req.message = mes; req;" },
       "Dimmer -1": {},
       "Dimmer -2": {},
       "Dimmer -3": {},    
@@ -580,7 +580,7 @@
           "type":"http-get", "command":"http://$MusicCastIp/YamahaExtendedControl/v1/netusb/getListInfo?input=$Input&index=0&size=8&lang=en", 
           "queryresult":"$.",
           "itemtype":   "button",
-          "itemname":   "DYNAMIK let t=$TransInputName.filter(i => (i.id == \"$Input\")); JSON.parse(\"$Result\").list_info[0] == undefined ? (\"No Content for Input: \"+t[0].text) : (JSON.parse(\"$Result\").menu_name + \" - Page \" + Math.ceil(Number(($MediaBrowserOffset==undefined?0:$MediaBrowserOffset) / 8 + 1)) + \"/\" + Math.ceil(Number(JSON.parse(\"$Result\").max_line / 8)))",
+          "itemname":   "DYNAMIK let t=$TransInputName.filter(i => (i.id == \"$Input\")); (JSON.parse(\"$Result\").response_code == 4 ||JSON.parse(\"$Result\").list_info[0] == undefined) ? (\"No Content for Input: \"+t[0].text) : (JSON.parse(\"$Result\").menu_name + \" - Page \" + Math.ceil(Number(($MediaBrowserOffset==undefined?0:$MediaBrowserOffset) / 8 + 1)) + \"/\" + Math.ceil(Number(JSON.parse(\"$Result\").max_line / 8)))",
           "itemUI":     true,
           "itemaction": ""
           },{
