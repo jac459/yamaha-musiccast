@@ -27,7 +27,7 @@ In Case the "Checking" hangs up at a certain Number: Repeat the Process starting
 2. Follow the Instructions above starting at Step 5.
 
 ## How to use the Driver
-### Finding your Yamaha AVR/ MusicCast Device and its Name
+### Finding the Yamaha AVR/ MusicCast Device and its Name
 The Driver will automatically find and list your Yamaha AVR and MusicCast Devices during the Installation Process (Step 9 of "How to Install the Driver"). For this purpose, a Selection of the IP Addresses is used that the meta Driver has collected with the help of the so-called "Discovery Process".
 The Device Names will be generated from "Model Name" + "Room Name". Hereby the Room Name will be used that was previously set in the official Yamaha MusicCast App (The Default is "Room"). The generated Names will also show up in the Directory "MusicCast Link" (Multiroom Audio).
 
