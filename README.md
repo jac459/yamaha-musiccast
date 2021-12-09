@@ -77,8 +77,8 @@ Customize the Status Label by activating or deactivating the Elements: Track, Ar
 Choose an Icon Set from a List. (The Icon Set "Yamaha AVR Modern" is under Construction)
 
 ###### Volume Slider
-This is a safety Feature that can prevent Yourself from damaging your Equipment or Ears. Select the maximum Volume Steps that are allowed when increasing the Volume via the Volume Slider. If you then "accitendly" move the Slider to "full blast", the Volume will only increase by the selected amount.\
-The Slider might show "full blast" for a second or two but it will refresh to the actual Volume increase. However, if you want to increase the Volume by more than the set Value, simply tap the right side of the Slider several times.
+This is a safety Feature that can prevent Yourself from damaging your Equipment or Ears. Select the maximum Volume Steps that are allowed when increasing the Volume via the Volume Slider. If you then "accidently" move the Slider to "full blast", the Volume will only increase by the selected amount.\
+The Slider might show "full blast" for a second or two, but it will refresh to the actual Volume increase. However, if you want to increase the Volume by more than the set Value, simply tap the right side of the Slider several times.
 
 #### Buttons/ Shortcuts still under Construction
 The following Buttons/ Shortcuts are currently only placeholders and have no confirmed function:
