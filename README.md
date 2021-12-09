@@ -109,7 +109,7 @@ The following Buttons/ Shortcuts are currently only placeholders and have no con
   - Improved how the the progress of Scanning is displayed (from: "Scanning X% - Please Refresh..." to: "Checking X/Y - Please Refresh...")
   - Improved the Pre Filtering (Only Checking Devices that are listed with Port 80 and 5000)
   - Speeding up the Scanning/ Checking Process by Removing duplicate IP adresses.
-- Musiccast Link: Changed to Albumart that is displayed when a Device is a Client in a Group.
+- Musiccast Link: Changed the Albumart that is displayed when a Device is a Client in a Group.
 - Input Directory: The Directory will now close after selecting an Input
 - Other minor Improvements
 
