@@ -116,9 +116,20 @@ The following Buttons/ Shortcuts are currently only placeholders and have no con
 - Media Browser: Improved when to show Banner "No Content for Input: XY"
 - *[Button "Dimmer 0": slightly changed Code but still under Construction]*
 
+### Version 16
+- New UI Elements to change the Display Brightness of an AVR:
+  - Direct Button: "Dimmer 0" to "Dimmer -4",
+  - Toggle Button: "Dark Mode"
+  - Slider: "Dimmer"
+- Label "Status": improved reliability/ refreshing
+- Improved displaying the Track info and Albumart (Info will only be displayed if Input Type is "netusb").
+- Directory "Settings": Added "info boxes" with additional info to the Directory "Settings" of this Driver.
+- Directory "Media Browser": Added Button "Close" to close the "Media Browser". Previously the Browser would only close on selecting a file or by pressing the Button "Home".
+- Other minor Bugfixes
+- Requires meta v. 1.0.5
+
 ## ToDos
 - Further Improve the Directory "Media Browser" (Add: playback next/ add to queue, show Playlist)
-- Finish the "Dimmer" Feature to change the Display Brightness of an AVR (Update of meta required to support xml Messages). 
 - Finish other Buttons/ Shortcuts that are Listed above as under Construction (or discard them)
 - Finish the Icon Set "Yamaha AVR Modern"
 
