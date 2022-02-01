@@ -81,7 +81,6 @@ The Slider might show "full blast" for a second or two, but it will refresh to t
 
 #### Buttons/ Shortcuts still under Construction
 The following Buttons/ Shortcuts are currently only placeholders and have no confirmed function:
-- Dimmer 0/-1/-2/-3/-4 and Dimmer Slider
 - Input Next/Previous
 - Tuner Band/FM/AM/DAB/Next/Previous
 - Tuning Up/Down
