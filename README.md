@@ -120,9 +120,13 @@ The following Buttons/ Shortcuts are currently only placeholders and have no con
   - Direct Button: "Dimmer 0" to "Dimmer -4",
   - Toggle Button: "Dark Mode"
   - Slider: "Dimmer"
-- Label "Status": improved reliability/ refreshing
+- Label "Status":
+  - improved reliability/ refreshing
+  - Added info for active "Input"
 - Improved displaying the Track info and Albumart (Info will only be displayed if Input Type is "netusb").
-- Directory "Settings": Added "info boxes" with additional info to the Directory "Settings" of this Driver.
+- Directory "Settings": 
+  - Added "info boxes" with additional info to the Directory "Settings" of this Driver.
+  - Added option for "Status Label" to include "Input" or not
 - Directory "Media Browser": Added Button "Close" to close the "Media Browser". Previously the Browser would only close on selecting a file or by pressing the Button "Home".
 - Other minor Bugfixes
 - Requires meta v. 1.0.5
