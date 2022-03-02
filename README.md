@@ -37,6 +37,50 @@ b) Rename the Room in the official Yamaha MusicCast App and repeat the Installat
 
 Note: The Driver will be installed for the specific Device selected. If you have multiple Devices you can install all of them one after the other.
 
+### Shortcut Layout Inspirations
+Use the Neeo App to add shortcuts according to your needs and preferences. The following examples can serve as inspiration.
+
+It is recommended the deactivate the Slide "Inputs" completely. Instead it is recommended to use the Shortcut for the Directory "Inputs", as this Directory will show all the Inputs that are actually available for the active Device.
+
+#### Example 1: TV + AVRCEIVER
+| Shortcuts | Slide "Control pad" | Slide "TV Number pad" |
+|-----------|---------------------|-----------------------|
+| ![tvavr1] | ![tvavr2]           | ![tvavr3]             |
+
+[tvavr1]:https://user-images.githubusercontent.com/39094775/156456408-1f03833d-298d-471e-b102-9fc01fb48426.png
+[tvavr2]:https://user-images.githubusercontent.com/39094775/156456414-047fda5a-e600-4973-b6eb-c0c199862283.png
+[tvavr3]:https://user-images.githubusercontent.com/39094775/156456420-9192ab28-dbfa-4198-a7c5-d186980a99ac.png
+
+##### Used Shortcuts in Order of Appearance:
+- Widget: Brightness Slider (Lights of the Room)
+- Directory: Speaker Pattern (RX-A3050)
+- Directory: Media Browser (RX-A3050)
+- Directory: Dsp (RX-A3050)
+- Directory: Scene List (RX-A3050)
+- Directory: Input List (RX-A3050)
+- Directory: Surround Decoder (RX-A3050)
+- Widget: Transport (TV)
+
+#### Example 2: MusicCast Speaker
+| Shortcuts (1)   | Shortcuts (2) | Shortcuts (3) |
+|-------------|---------------------|-----------------------|
+| ![wx-010_1] | ![wx-010_2]         | ![wx-010_3]       |
+
+[wx-010_1]:https://user-images.githubusercontent.com/39094775/156455799-55015d26-cc57-4431-b9ab-17726d503bed.png
+[wx-010_2]:https://user-images.githubusercontent.com/39094775/156455808-e2a95135-bcec-451f-b7d3-2680cd931008.png
+[wx-010_3]:https://user-images.githubusercontent.com/39094775/156455813-93b3780d-a6d3-4369-bfc0-73960691abdc.png
+
+##### Used Shortcuts in Order of Appearance:
+- Image: Albumcover (WX-010)
+- Label: Status (WX-010)
+- Slider: Volume (WX-010)
+- Directory: Media Browser (WX-010)
+- Directory: Input List (WX-010)
+- Directory: Musiccast Link (WX-010)
+- Widget: Transport Scan (WX-010)
+- Widget: Transport (WX-010)
+- Directory: Settings (WX-010)
+
 ### Notable Features/ Shortcuts of the Driver
 Use Your NEEO App to add whatever Shortcuts you need to a Recipe. However the following Features deserve a special mentioning and some extra explanation.
 
