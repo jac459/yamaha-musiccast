@@ -40,7 +40,7 @@ Note: The Driver will be installed for the specific Device selected. If you have
 ### Shortcut Layout Inspirations
 Use the Neeo App to add shortcuts according to your needs and preferences. The following examples can serve as inspiration.
 
-It is recommended the deactivate the Slide "Inputs" completely. Instead it is recommended to use the Shortcut for the Directory "Inputs", as this Directory will show all the Inputs that are actually available for the active Device.
+It is recommended the deactivate the Slide "Inputs" completely. Instead it is recommended to use the Shortcut for the Directory "Input List", as this Directory will show all the Inputs that are actually available for the active Device.
 
 #### Example 1: TV + AVRCEIVER
 | Shortcuts | Slide "Control pad" | Slide "TV Number pad" |
