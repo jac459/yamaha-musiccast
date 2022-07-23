@@ -123,6 +123,9 @@ Choose an Icon Set from a List. (The Icon Set "Yamaha AVR Modern" is under Const
 This is a safety Feature that can prevent Yourself from damaging your Equipment or Ears. Select the maximum Volume Steps that are allowed when increasing the Volume via the Volume Slider. If you then "accidently" move the Slider to "full blast", the Volume will only increase by the selected amount.\
 The Slider might show "full blast" for a second or two, but it will refresh to the actual Volume increase. However, if you want to increase the Volume by more than the set Value, simply tap the right side of the Slider several times.
 
+###### Reverse DSP List  
+This Option will reverse the Order of the Options in the DSP List. By default, the DSP Settings "Straight" and "Surround Decoder" are at the very end of the List. If these Options are used frequently, you have to scroll all the way down the list, which can be annoying. Activating this Option places "Straight" at the top of the List  followed by "Surround Decoder" etc. for easy access.
+
 #### Buttons/ Shortcuts still under Construction
 The following Buttons/ Shortcuts are currently only placeholders and have no confirmed function:
 - Input Next/Previous
@@ -174,6 +177,11 @@ The following Buttons/ Shortcuts are currently only placeholders and have no con
 - Directory "Media Browser": Added Button "Close" to close the "Media Browser". Previously the Browser would only close on selecting a file or by pressing the Button "Home".
 - Other minor Bugfixes
 - Requires meta v. 1.0.5
+
+### Version 17
+- Directory "Settings": Added Option "Reverse DSP List". This Option will reverse the Order of the Options in the DSP List. This places "straight" at the top of the List.
+- Clean up in section discover
+- Other minor Bugfixes
 
 ## ToDos
 - Further Improve the Directory "Media Browser" (Add: playback next/ add to queue, show Playlist)
