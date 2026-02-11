@@ -1,7 +1,7 @@
 { "name":"MusicCast",
   "manufacturer":"Yamaha",
   "type":"AVRECEIVER",
-  "version":17,
+  "version":19,
   "compatible-meta":"1.0.5",
   "persistedvariables":{
     "ToInitiate":true,
@@ -60,7 +60,7 @@
   "template":{
     "name":"MusicCast", 
     "dynamicname":"DYNAMIK_INST_START DYNAMIK JSON.parse(\"$Result\").model_name + \" \" + JSON.parse(\"$Result\").room_name DYNAMIK_INST_END",
-    "dynamicid":  "DYNAMIK_INST_START DYNAMIK JSON.parse(\"$Result\").ip DYNAMIK_INST_END",
+    "dynamicid":  "DYNAMIK_INST_START DYNAMIK \"MusicCast - \" + JSON.parse(\"$Result\").mac DYNAMIK_INST_END",
     "variables":{
       "MusicCastIp":"DYNAMIK_INST_START DYNAMIK JSON.parse(\"$Result\").ip DYNAMIK_INST_END",
       "MusicCastDevices":"$MyDevices",
@@ -148,6 +148,14 @@
       "SetStatAudioFormat":false,
       "SetStatVolume":false,
       "SetVolumeLimit":"none",
+      "CloseInputList":true,
+      "CloseMediaBrowser":true,
+      "CloseSceneList":true,
+      "CloseDSP":false,
+      "CloseSurrDecoder":false,
+      "CloseSpeakerPattern":false,
+      "CloseDeviceManager":false,
+      "CloseZoneManager":false,
       "ReverseDSPList":false
     },
     "labels":{
@@ -155,7 +163,8 @@
       "Input":         {"label":"", "listen":"Input"},
       "Track":         {"label":"", "listen":"Track"},
       "Artist":        {"label":"", "listen":"Artist"},
-      "Album":         {"label":"", "listen":"Album"}
+      "Album":         {"label":"", "listen":"Album"},
+      "AlbumArt":      {"label":"", "listen":"AlbumArt"}
     },
     "images":{
       "AlbumCover": {"label":"", "size":"large", "listen":"AlbumArt"}
@@ -179,7 +188,7 @@
           {"variable": "PureDirect",         "value": "DYNAMIK JSON.parse(\"$Result\")[0].pure_direct"},
           {"variable": "Enhancer",           "value": "DYNAMIK JSON.parse(\"$Result\")[0].enhancer"},
           {"variable": "Status",             "value": "DYNAMIK let t=$TransInputName.filter(i => (i.id == \"$Input\")); ($SetStatInput?\"Input: \"+t[0].text:\"\") + (\"$PlayInfoType\"==\"netusb\" ? (($SetStatTrack?\" Track: \"+\"$Track\":\"\") + ($SetStatTrack&&$SetStatArtist?\" - \":\"\") + ($SetStatArtist?\"$Artist\":\"\") + ($SetStatAlbum?\" Album: \"+\"$Album\":\"\") + ($SetStatTime?\" Time: \"+\"$PlayTimeHHMMSS\":\"\") + ($SetStatProgress?\" Progress: \"+(\"$Progress\"==0?\"N/A\":(\"$Progress\"+\"%\")):\"\") + ($SetStatAudioFormat?\" Format: \"+\"$AudioFormat\"+\"-\"+\"$AudioSampleRate\":\"\")) : \"\") + ($SetStatVolume?\" Volume: \"+($ActualVolumeExists?\"$VolumePlayedActual\":\"$VolumePlayedTotal\"+\"/\"+\"$VolumeMax\"):\"\") "}
-            ]},
+      ]},
       "YamahaSignalInfo": {"type":"http-get", "isHub":false, "command":"http://$MusicCastIp/YamahaExtendedControl/v1/$ZoneId/getSignalInfo", "pooltime":"5000", "poolduration":"", "queryresult" : "$.audio", 
         "evalwrite":[ 
           {"variable": "AudioFormat",    "value": "DYNAMIK JSON.parse(\"$Result\")[0].format"},
@@ -195,9 +204,9 @@
       ]},
       "YamahaPlayInfo": {"type":"http-get", "isHub":false, "command":"http://$MusicCastIp/YamahaExtendedControl/v1/netusb/getPlayInfo", "pooltime":"1000", "poolduration":"", "queryresult" : "$.", 
         "evalwrite":[ 
-          {"variable": "Track",         "value": "DYNAMIK JSON.parse(\"$Result\")[0].track"},
-          {"variable": "Artist",        "value": "DYNAMIK JSON.parse(\"$Result\")[0].artist"},
-          {"variable": "Album",         "value": "DYNAMIK JSON.parse(\"$Result\")[0].album"},
+          {"variable": "Track",         "value": "DYNAMIK JSON.parse(\"$Result\")[0].track.replace(/\"/g, \"\")"},
+          {"variable": "Artist",        "value": "DYNAMIK JSON.parse(\"$Result\")[0].artist.replace(/\"/g, \"\")"},
+          {"variable": "Album",         "value": "DYNAMIK JSON.parse(\"$Result\")[0].album.replace(/\"/g, \"\")"},
           {"variable": "AlbumArt",      "value": "DYNAMIK \"$PlayInfoType\"==\"netusb\" ? ($MusicCastLinkIsLocked ? (\"$IconBaseUrl/yamaha_mc.png\").replace(/ /g, \"%20\") : (\"http://$MusicCastIp\" + JSON.parse(\"$Result\")[0].albumart_url)) : \"\" "},
           {"variable": "PlayTimeSec",   "value": "DYNAMIK JSON.parse(\"$Result\")[0].play_time"},
           {"variable": "TotalTime",     "value": "DYNAMIK JSON.parse(\"$Result\")[0].total_time"},
@@ -388,7 +397,7 @@
           "itemlabel":  "Recall this Scene",
           "itemimage":  "DYNAMIK (\"$IconBaseUrl/$Theme/scene_undefined.png\").replace(/ /g, \"%20\")",
           "itemaction": "SceneListSet",
-          "itemUI":     "close",
+          "itemUI":     "DYNAMIK $CloseSceneList?\"close\":\"reload\" ",
           "evalwrite":[{"variable":"SceneSet", "value":"DYNAMIK JSON.parse(\"$Result\").num"}]
         }]},
         "SceneListSet": {"label":"", "commandset": [{"type":"http-get", "command":"http://$MusicCastIp/YamahaExtendedControl/v1/$ZoneId/recallScene?num=$SceneSet"}]}
@@ -401,7 +410,7 @@
           "itemlabel":  "DYNAMIK \"$SpeakerPatternMax\" == 1 ? \"Not supporting multiple Patterns\" : \"Switch to this Speaker Pattern\" ",
           "itemimage":  "DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/radio_button_\" + (JSON.parse(\"$Result\").num==\"$SpeakerPatternNum\" ? \"on.png\" : \"off.png\") ).replace(/ /g, \"%20\") ",
           "itemaction": "SpeakerPatternSet",
-          "itemUI":     "reload",
+          "itemUI":     "DYNAMIK $CloseSpeakerPattern?\"close\":\"reload\" ",
           "evalwrite":[{"variable":"SpeakerPatternNum", "value":"DYNAMIK JSON.parse(\"$Result\").num"}]
         }]},
         "SpeakerPatternSet": {"label":"", "commandset": [{"type":"http-get", "command":"http://$MusicCastIp/YamahaExtendedControl/v1/system/setSpeakerPattern?num=$SpeakerPatternNum"}]}
@@ -414,7 +423,7 @@
           "itemlabel":  "DYNAMIK \"$Result\"==\"$Input\" ? \"Input (Active)\" : \"Input\" ", 
           "itemimage":  "DYNAMIK let t=$TransInputIcon; (\"$IconBaseUrl/$Theme\"+\"/input_\"+ t.$Result +\".png\").replace(/ /g, \"%20\")",
           "itemaction": "InputSet", 
-          "itemUI":     "close",
+          "itemUI":     "DYNAMIK $CloseInputList?\"close\":\"reload\" ",
           "evalwrite":[{"variable":"Input", "value":"$Result"}]
         }]},
         "InputSet":{"label":"", "commandset": [{"type":"http-get", "command":"http://$MusicCastIp/YamahaExtendedControl/v1/$ZoneId/setInput?input=$Input"}]}
@@ -427,7 +436,7 @@
           "itemlabel":  "DYNAMIK (\"$Result\"==\"$SurrDecoderType\" && \"$SoundProgram\"==\"surr_decoder\") ? \"Surround Decoder Type (Active)\" : \"Surround Decoder Type\" ", 
           "itemimage":  "DYNAMIK let t=$TransSurrDecoderIcon; (\"$IconBaseUrl/$Theme\"+\"/surr_decoder_\"+ t.$Result +\".png\").replace(/ /g, \"%20\")",
           "itemaction": "SurrDecoderSet",
-          "itemUI":     "reload",
+          "itemUI":     "DYNAMIK $CloseSurrDecoder?\"close\":\"reload\" ",
           "evalwrite":[
             {"variable":"SurrDecoderType","value":"$Result"},
             {"variable":"SoundProgram",   "value":"surr_decoder"}
@@ -446,7 +455,7 @@
           "itemlabel":  "DYNAMIK \"$Result\"==\"$SoundProgram\" ? \"DSP (Active)\" : \"DSP\" ", 
           "itemimage":  "DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/dsp_\"+\"$Result\"+\".png\").replace(/ /g, \"%20\")",
           "itemaction": "DYNAMIK \"$Result\"==\"surr_decoder\" ? undefined : \"DSPSet\" ",
-          "itemUI":     "reload",
+          "itemUI":     "DYNAMIK $CloseDSP?\"close\":\"reload\" ",
           "evalwrite":[{"variable":"SoundProgram", "value":"DYNAMIK \"$Result\"==\"surr_decoder\" ? \"$SoundProgram\" : \"$Result\" "}],
           "evalnext":[{"test":"$Result == \"surr_decoder\" ", "then":"Surround Decoder", "or":""}]
         }]},
@@ -458,7 +467,7 @@
             "itemlabel":  "DYNAMIK (\"$Result\"==\"$SurrDecoderType\" && \"$SoundProgram\"==\"surr_decoder\") ? \"Surround Decoder Type (Active)\" : \"Surround Decoder Type\" ", 
             "itemimage":  "DYNAMIK let t=$TransSurrDecoderIcon; (\"$IconBaseUrl/$Theme\"+\"/surr_decoder_\"+ t.$Result +\".png\").replace(/ /g, \"%20\")",
             "itemaction": "SurrDecoderSet",
-            "itemUI":     "reload",
+            "itemUI":     "DYNAMIK $CloseDSP?\"close\":\"reload\" ",
             "evalwrite":[
               {"variable":"SurrDecoderType","value":"$Result"},
               {"variable":"SoundProgram",   "value":"surr_decoder"}
@@ -477,7 +486,7 @@
           "itemlabel":  "DYNAMIK JSON.parse(\"$Result\").ip==\"$MusicCastIp\" ? \"In Control of this Device\" : \"Take Control of this Device\" ",
           "itemimage":  "DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/radio_button_\" + (JSON.parse(\"$Result\").ip==\"$MusicCastIp\" ? \"on.png\" : \"off.png\") ).replace(/ /g, \"%20\") ",
           "itemaction": "DeviceManagerSet",
-          "itemUI":     "reload",
+          "itemUI":     "DYNAMIK $CloseDeviceManager?\"close\":\"reload\" ",
           "evalwrite":[
             {"variable":"MusicCastIp","value":"DYNAMIK JSON.parse(\"$Result\").ip"},
             {"variable":"ActStatus",  "value":"DYNAMIK \"Now in charge of Device: \" + JSON.parse(\"$Result\").model_name + \" \" + JSON.parse(\"$Result\").room_name"}
@@ -492,7 +501,6 @@
           "itemname":   "DYNAMIK JSON.parse(\"$Result\").name", 
           "itemlabel":  "DYNAMIK JSON.parse(\"$Result\").label", 
           "itemimage":  "",
-          "itemUI":     "reload",
           "evalnext":[
             {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Control a Zone\")", "then":"Control a Zone", "or":""},
             {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Power Zone On\")",  "then":"Power Zone On",  "or":""},
@@ -506,7 +514,7 @@
             "itemlabel":  "Take Control of this Zone",
             "itemimage":  "DYNAMIK (\"$IconBaseUrl/$Theme\"+((\"$ZoneId\"==JSON.parse(\"$Result\").id)?(\"/zone_on.png\"):(\"/zone_off.png\"))).replace(/ /g, \"%20\")",
             "itemaction": "ZoneManagerSet",
-            "itemUI":     "reload",
+            "itemUI":     "DYNAMIK $CloseZoneManager?\"close\":\"reload\" ",
             "evalwrite":[
               {"variable":"ZoneId","value":"DYNAMIK JSON.parse(\"$Result\").id"},
               {"variable":"ZoneNum","value":"DYNAMIK let t=$TransZone; t.$ZoneId"},
@@ -521,6 +529,7 @@
             "itemlabel":  "Power this Zone On",
             "itemimage":  "DYNAMIK (\"$IconBaseUrl/$Theme/power_off.png\").replace(/ /g, \"%20\")",
             "itemaction": "ACTION_ZonePrwOn",
+            "itemUI":     "DYNAMIK $CloseZoneManager?\"close\":\"reload\" ",
             "evalwrite":[{"variable":"PwrZoneId", "value":"DYNAMIK JSON.parse(\"$Result\").id"}]
           }]},
           "Power Zone Off":{"label":"", "commandset":[{
@@ -530,6 +539,7 @@
             "itemlabel":  "Power this Zone Off",
             "itemimage":  "DYNAMIK (\"$IconBaseUrl/$Theme/power_off.png\").replace(/ /g, \"%20\")",
             "itemaction": "ACTION_ZonePrwOff",
+            "itemUI":     "DYNAMIK $CloseZoneManager?\"close\":\"reload\" ",
             "evalwrite":[{"variable":"PwrZoneId", "value":"DYNAMIK JSON.parse(\"$Result\").id"}]
           }]},
           "ACTION_ZonePrwOn": {"label":"", "commandset": [{"type":"http-get", "command":"http://$MusicCastIp/YamahaExtendedControl/v1/$PwrZoneId/setPower?power=on"}]},
@@ -543,7 +553,7 @@
           "itemlabel":  "DYNAMIK $MusicCastLinkIsLocked==true ? \"This Device is a Client of a Group\" : ($MusicCastClientList.includes(JSON.parse(\"$Result\").ip) ?\"Remove this Device\":\"Add this Device\") ", 
           "itemimage":  "DYNAMIK $MusicCastLinkIsLocked==true ? \"http://placekitten.com/400/400\"     : (\"$IconBaseUrl/$Theme\" + ($MusicCastClientList.includes(JSON.parse(\"$Result\").ip) ? \"/zone_on.png\" : \"/zone_off.png\" ) ).replace(/ /g, \"%20\") ", 
           "itemaction": "DYNAMIK $MusicCastLinkIsLocked==true ? \"\" : \"AddOrRemoveDevice\" ",
-          "itemUI":     "close", 
+          "itemUI":     "close",
           "evalwrite":[
             {"variable":"MusicCastClientIp", "value":"DYNAMIK $MusicCastLinkIsLocked==true ? \"\" : JSON.parse(\"$Result\").ip"},
             {"variable":"MusicCastClientAdd","value":"DYNAMIK $MusicCastLinkIsLocked==true ? \"\" : $MusicCastClientList.includes(\"$MusicCastClientIp\")?false:true"},
@@ -564,7 +574,8 @@
           {"type":"static", "command":[
             {"name":"Status Label",              "label":"Customize the Status Label",    "image":"label_abc",   "navigation":"Status Label"},
             {"name":"Theme",                     "label":"Choose an Icon Set",            "image":"theme",       "navigation":"Theme"},
-            {"name":"Volume Slider",             "label":"Limit the max. Volume increase","image":"volume",      "navigation":"Volume Slider"}, 
+            {"name":"Volume Slider",             "label":"Limit the max. Volume increase","image":"volume",      "navigation":"Volume Slider"},
+            {"name":"Directory Behavior",        "label":"Set Behavior after Selection",  "image":"dir_behavior","navigation":"Directory Behavior"},
             {"name":"Reverse DSP List",          "label":"Reverse the Order of DSP List", "image":"reverse_list","navigation":"Reverse DSP List"}], 
             "queryresult":"$.*",
             "itemname":   "DYNAMIK JSON.parse(\"$Result\").name",
@@ -572,34 +583,46 @@
             "itemimage":  "DYNAMIK (\"$IconBaseUrl/\" + JSON.parse(\"$Result\").image + \".png\").replace(/ /g, \"%20\")",
             "itemUI":     "reload",
             "evalnext":[
-              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Status Label\")",    "then":"Status Label",    "or":""},
-              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Theme\")",           "then":"Theme",           "or":""},
-              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Volume Slider\")",   "then":"Volume Slider",   "or":""},
-              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Reverse DSP List\")","then":"Reverse DSP List","or":""}
+              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Status Label\")",      "then":"Status Label",      "or":""},
+              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Theme\")",             "then":"Theme",             "or":""},
+              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Volume Slider\")",     "then":"Volume Slider",     "or":""},
+              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Directory Behavior\")","then":"Directory Behavior","or":""},
+              {"test":"DYNAMIK (JSON.parse(\"$Result\").navigation == \"Reverse DSP List\")",  "then":"Reverse DSP List",  "or":""}
             ]      
           }
         ]},
         "Status Label":{"label":"", "commandset": [
-          {"type":"static", "command":".", "itemtype": "info", "itemname":"Click here for more Info :", "itemlabel":"Customize the status label by activating or deactivating the elements in the List."},
-          {"type":"static", "command":[{"name":"Input",       "label":"For Example: HDMI1"}],            "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatInput      ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"SetStatInput" ,     "value":"DYNAMIK $SetStatInput      ?false:true "}]},
-          {"type":"static", "command":[{"name":"Track",       "label":"For Example: Rocket Man"}],       "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatTrack      ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"SetStatTrack" ,     "value":"DYNAMIK $SetStatTrack      ?false:true "}]},
-          {"type":"static", "command":[{"name":"Artist",      "label":"For Example: Elton John"}],       "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatArtist     ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"SetStatArtist",     "value":"DYNAMIK $SetStatArtist     ?false:true "}]},
-          {"type":"static", "command":[{"name":"Album",       "label":"For Example: Honky Château"}],    "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatAlbum      ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"SetStatAlbum" ,     "value":"DYNAMIK $SetStatAlbum      ?false:true "}]},
-          {"type":"static", "command":[{"name":"Time",        "label":"For Example: 1:23"}],             "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatTime       ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"SetStatTime",       "value":"DYNAMIK $SetStatTime       ?false:true "}]},
-          {"type":"static", "command":[{"name":"Progress",    "label":"For Example: 72%"}],              "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatProgress   ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"SetStatProgress",   "value":"DYNAMIK $SetStatProgress   ?false:true "}]},
-          {"type":"static", "command":[{"name":"Audio Format","label":"For Example: PCM-44.1 kHz"}],     "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatAudioFormat?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"SetStatAudioFormat","value":"DYNAMIK $SetStatAudioFormat?false:true "}]},
-          {"type":"static", "command":[{"name":"Volume",      "label":"For Example: 21/60 or -37.5 dB"}],"queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatVolume     ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"SetStatVolume",     "value":"DYNAMIK $SetStatVolume     ?false:true "}]}
+          {"type":"static", "command":".", "itemtype":"info", "itemname":"Click here for more Info :", "itemlabel":"Customize the status label by activating or deactivating the elements in the List."},
+          {"type":"static", "command":".", "itemname":"Input",       "itemlabel":"For Example: HDMI1",             "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatInput      ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"SetStatInput" ,     "value":"DYNAMIK $SetStatInput      ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Track",       "itemlabel":"For Example: Rocket Man",        "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatTrack      ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"SetStatTrack" ,     "value":"DYNAMIK $SetStatTrack      ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Artist",      "itemlabel":"For Example: Elton John",        "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatArtist     ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"SetStatArtist",     "value":"DYNAMIK $SetStatArtist     ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Album",       "itemlabel":"For Example: Honky Château",     "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatAlbum      ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"SetStatAlbum" ,     "value":"DYNAMIK $SetStatAlbum      ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Time",        "itemlabel":"For Example: 1:23",              "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatTime       ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"SetStatTime",       "value":"DYNAMIK $SetStatTime       ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Progress",    "itemlabel":"For Example: 72%",               "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatProgress   ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"SetStatProgress",   "value":"DYNAMIK $SetStatProgress   ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Audio Format","itemlabel":"For Example: PCM-44.1 kHz",      "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatAudioFormat?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"SetStatAudioFormat","value":"DYNAMIK $SetStatAudioFormat?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Volume",      "itemlabel":"For Example: 21/60 or -37.5 dB", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($SetStatVolume     ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"SetStatVolume",     "value":"DYNAMIK $SetStatVolume     ?false:true "}]}
         ]},
         "Theme":{"label":"", "commandset": [
           {"type":"static", "command":".", "itemtype": "info", "itemname":"Click here for more Info :", "itemlabel":"Choose an icon set from the list. (The icon set \"Yamaha AVR Modern\" is under construction.)"},
           {"type":"static", "command":[{"name":"Yamaha AVR Classic","label":"Default Icon Set","link":"Yamaha AVR Classic"},{"name":"Yamaha AVR Modern","label":"Icon Set Under Construction","link":"Yamaha AVR Modern"}], "queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/radio_button_\" + ( \"$Theme\"==JSON.parse(\"$Result\").link?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"Theme", "value":"DYNAMIK JSON.parse(\"$Result\").link"}]}
         ]},
         "Volume Slider":{"label":"", "commandset": [
-          {"type":"static", "command":".", "itemtype": "info", "itemname":"Click here for more Info :", "itemlabel":"Limit the maximum volume increase for the volume slider. If the slider is moved (accidently), the volume will only be increased by the selected amount."},
+          {"type":"static", "command":".", "itemtype":"info", "itemname":"Click here for more Info :", "itemlabel":"Limit the maximum volume increase for the volume slider. If the slider is moved (accidently), the volume will only be increased by the selected amount."},
           {"type":"static", "command":[{"name":"None","limit":"none"},{"name":"1","limit":"1"},{"name":"5","limit":"5"},{"name":"10","limit":"10"},{"name":"20","limit":"20"},{"name":"25","limit":"25"},{"name":"50","limit":"50"}], "queryresult":"$.*", "itemname":"DYNAMIK \"Limit: \"+JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"Limit the max. Volume increase", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/radio_button_\" + ( \"$SetVolumeLimit\"==JSON.parse(\"$Result\").limit?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"SetVolumeLimit", "value":"DYNAMIK JSON.parse(\"$Result\").limit"}]}
         ]},
+        "Directory Behavior":{"label":"", "commandset": [
+          {"type":"static", "command":".", "itemtype":"info", "itemname":"Click here for more Info :", "itemlabel":"Activate Check Mark to directly close a Directory after Selecting a List Item."},
+          {"type":"static", "command":".", "itemname":"Input List",      "itemlabel":"DYNAMIK \"Directory is set to: \" + ($CloseInputList      ?\"close\":\"reload\") ", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($CloseInputList      ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"CloseInputList",      "value":"DYNAMIK $CloseInputList      ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Media Browser",   "itemlabel":"DYNAMIK \"Directory is set to: \" + ($CloseMediaBrowser   ?\"close\":\"reload\") ", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($CloseMediaBrowser   ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"CloseMediaBrowser",   "value":"DYNAMIK $CloseMediaBrowser   ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Scene List",      "itemlabel":"DYNAMIK \"Directory is set to: \" + ($CloseSceneList      ?\"close\":\"reload\") ", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($CloseSceneList      ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"CloseSceneList" ,     "value":"DYNAMIK $CloseSceneList      ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"DSP",             "itemlabel":"DYNAMIK \"Directory is set to: \" + ($CloseDSP            ?\"close\":\"reload\") ", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($CloseDSP            ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"CloseDSP",            "value":"DYNAMIK $CloseDSP            ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Surround Decoder","itemlabel":"DYNAMIK \"Directory is set to: \" + ($CloseSurrDecoder    ?\"close\":\"reload\") ", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($CloseSurrDecoder    ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"CloseSurrDecoder",    "value":"DYNAMIK $CloseSurrDecoder    ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Speaker Pattern", "itemlabel":"DYNAMIK \"Directory is set to: \" + ($CloseSpeakerPattern ?\"close\":\"reload\") ", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($CloseSpeakerPattern ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"CloseSpeakerPattern", "value":"DYNAMIK $CloseSpeakerPattern ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Device Manager",  "itemlabel":"DYNAMIK \"Directory is set to: \" + ($CloseDeviceManager  ?\"close\":\"reload\") ", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($CloseDeviceManager  ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"CloseDeviceManager",  "value":"DYNAMIK $CloseDeviceManager  ?false:true "}]},
+          {"type":"static", "command":".", "itemname":"Zone Manager",    "itemlabel":"DYNAMIK \"Directory is set to: \" + ($CloseZoneManager    ?\"close\":\"reload\") ", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($CloseZoneManager    ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemaction":"Persist", "itemUI":"reload", "evalwrite":[{"variable":"CloseZoneManager",    "value":"DYNAMIK $CloseZoneManager    ?false:true "}]}
+          ]},
         "Reverse DSP List":{"label":"", "commandset": [
-          {"type":"static", "command":".", "itemtype": "info", "itemname":"Click here for more Info :", "itemlabel":"This Option will reverse the Order of the Options in the DSP List. This places \"straight\" at the top of the List."},
+          {"type":"static", "command":".", "itemtype":"info", "itemname":"Click here for more Info :", "itemlabel":"This Option will reverse the Order of the Options in the DSP List. This places \"straight\" at the top of the List."},
           {"type":"static", "command":[{"name":"Reverse DSP List","label":"Reverse the Order of DSP List"}],"queryresult":"$.*", "itemname":"DYNAMIK JSON.parse(\"$Result\").name", "itemaction":"Persist", "itemlabel":"DYNAMIK JSON.parse(\"$Result\").label", "itemimage":"DYNAMIK (\"$IconBaseUrl/$Theme\"+\"/check_\" + ($ReverseDSPList ?\"on.png\":\"off.png\") ).replace(/ /g, \"%20\") ", "itemUI":"reload", "evalwrite":[{"variable":"ReverseDSPList", "value":"DYNAMIK $ReverseDSPList?false:true"}]}
         ]},
         "Persist":{"label":"", "commandset": [
@@ -644,7 +667,7 @@
           "itemname":   "DYNAMIK JSON.parse(\"$Result\").text",
           "itemlabel":  "DYNAMIK JSON.parse(\"$Result\").subtexts[0]",
           "itemimage":  "DYNAMIK JSON.parse(\"$Result\").thumbnail != \"\" ? JSON.parse(\"$Result\").thumbnail : (\"$IconBaseUrl/$Theme/folder.png\").replace(/ /g, \"%20\")",
-          "itemUI":     "DYNAMIK let a = JSON.parse(\"$Result\").attribute; (a >> 2 & 1) === 1 ? \"close\" : undefined",
+          "itemUI":     "DYNAMIK let a = JSON.parse(\"$Result\").attribute; (a >> 2 & 1) === 1 ? ($CloseMediaBrowser?\"close\":\"reload\") : undefined",
           "itemaction": "DYNAMIK let a = JSON.parse(\"$Result\").attribute; for (let i=0; i<28; i++) {const bol=(a>>i&1)===1;bol?console.log('bit '+i+' '+bol+' - '+$MediaBrowserCapabilities[i]):'';}; (a >> 2 & 1) === 1 ? \"MediaPlaySet\" : undefined",
           "evalwrite":[
             {"variable":"MediaBrowserIndex", "value":"DYNAMIK Number($MediaBrowserOffset + $ListIndex - 4)"},
