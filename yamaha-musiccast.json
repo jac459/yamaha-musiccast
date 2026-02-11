@@ -1,7 +1,7 @@
 { "name":"MusicCast",
   "manufacturer":"Yamaha",
   "type":"AVRECEIVER",
-  "version":19,
+  "version":18,
   "compatible-meta":"1.0.5",
   "persistedvariables":{
     "ToInitiate":true,
