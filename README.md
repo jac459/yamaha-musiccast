@@ -183,6 +183,14 @@ The following Buttons/ Shortcuts are currently only placeholders and have no con
 - Clean up in section discover
 - Other minor Bugfixes
 
+### Version 18
+- Directory "Settings": Added Option "Directory Behavior". This option sets the behavior after selecting a list item in the various directories of the driver to either close the directory or keep it open (reload).
+- Other minor Bugfixes
+- BREAKING CHANGE: changed the value used for identification of the device in the communication between NEEO SDK and meta. From version 18 the the mac address of the device is used for the "dynamicid" (instead of the ip address).
+- UPDATING TO VERISON 18 REQUIRES TO DELETE* ALL YAMAHA MUSICCAST DEVICES FROM YOUR NEEO SYSTEM AND REINSTALL THEM.
+
+*Open the NEEO App or the web-UI and go to: "Devices" > select device > "Delete"; Then follow the [installation instructions](#a-Installation-via-meta-core-Driver) at Step 6.
+
 ## ToDos
 - Further Improve the Directory "Media Browser" (Add: playback next/ add to queue, show Playlist)
 - Finish other Buttons/ Shortcuts that are Listed above as under Construction (or discard them)
